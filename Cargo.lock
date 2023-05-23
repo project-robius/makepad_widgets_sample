@@ -165,6 +165,7 @@ dependencies = [
 name = "widgets"
 version = "0.1.0"
 dependencies = [
+ "makepad-platform",
  "makepad-widgets",
 ]
 

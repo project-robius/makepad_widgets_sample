@@ -11,6 +11,7 @@ use makepad_widgets::*;
 live_design!{
     import makepad_widgets::button::Button;
     import makepad_widgets::desktop_window::DesktopWindow;
+    import makepad_widgets::frame::Frame;
     import makepad_widgets::label::Label;
     import makepad_widgets::frame::Image;
     import makepad_widgets::text_input::TextInput;
@@ -49,8 +50,6 @@ live_design!{
                 height: Fill
             },
             draw_bg: {
-                
-                
                 // The `fn pixel(self) -> vec4` syntax is used to define a property named `pixel`,
                 // the value of which is a shader. We use our own custom DSL to define shaders. It's
                 // syntax is *mostly* compatible with GLSL, although there are some differences as
@@ -59,7 +58,7 @@ live_design!{
                     // Within a shader, the `self.geom_pos` syntax is used to access the `geom_pos`
                     // attribute of the shader. In this case, the `geom_pos` attribute is built in,
                     // and ranges from 0 to 1.
-                    return mix(#7, #3, self.geom_pos.y);
+                    return mix(#7, #5, self.geom_pos.y);
                 }
             }
             
@@ -82,18 +81,13 @@ live_design!{
             // existing values.
             
             button1 = <Button> {
-                draw_icon:{
-                    //svg_file: dep("crate://self/resources/Icon_Redo.svg")
-                    svg_path:"M7399.39,1614.16C7357.53,1615.77 7324.04,1650.26 7324.04,1692.51C7324.04,1702.28 7316.11,1710.22 7306.33,1710.22C7296.56,1710.22 7288.62,1702.28 7288.62,1692.51C7288.62,1630.8 7337.85,1580.49 7399.14,1578.74L7389.04,1569.44C7381,1562.04 7380.49,1549.51 7387.88,1541.47C7395.28,1533.44 7407.81,1532.92 7415.85,1540.32L7461.76,1582.58C7465.88,1586.37 7468.2,1591.73 7468.15,1597.32C7468.1,1602.91 7465.68,1608.23 7461.5,1611.94L7415.59,1652.71C7407.42,1659.97 7394.9,1659.23 7387.65,1651.06C7380.39,1642.89 7381.14,1630.37 7389.3,1623.12L7399.39,1614.16Z"
-                    //path:"M0,0 L20.0,0.0 L20.0,20.0 Z"
-                }
                 icon_walk:{margin:{left:10}, width:16,height:Fit}
                 label: "Click to count"
             }
-            input1 = <TextInput> {
-                walk: {width: 100, height: 30},
-                label: "Click to count"
-            }
+            // input1 = <TextInput> {
+            //     walk: {width: 100, height: 30},
+            //     label: "Click to count"
+            // }
             // A label to display the counter.
             label1 = <Label> {
                 draw_label: {
@@ -101,6 +95,32 @@ live_design!{
                 },
                 label: "Counter: 0"
             }
+
+            InputFrame = <Frame> {
+                walk: {width: Fit, height: Fit}
+                layout: {
+                    flow: Right,
+                    spacing: 10,
+                },
+
+                label_example = <Label> {
+                    walk: {height:30},
+                    align: {
+                        // x: 1.5,
+                        y: 1
+                    }
+                    draw_label: {
+                        color: #f
+                    },
+                    label: "Input Field:"
+                }
+
+                input_example = <TextInput> {
+                    walk: {width:100, height:30},
+                    text: "Enter Text Here"
+                }
+            }
+
         }
     }
 }
@@ -132,6 +152,8 @@ pub struct App {
     // The #[rust] attribute here is used to indicate that this field should *not* be initialized
     // from a DSL object, even when a corresponding property exists.
     #[rust] counter: usize,
+    #[rust] sample: String,
+
 }
 
 impl LiveHook for App {
@@ -140,7 +162,7 @@ impl LiveHook for App {
     }
 }
 
-impl App{
+impl App {
     async fn _do_network_request(_cx:CxRef, _ui:WidgetRef, _url:&str)->String{
         //let x = fetch(urL).await;
         //ui.get_label(id!(thing)).set_text(&mut *cx.borrow_mut(), x);
@@ -148,13 +170,13 @@ impl App{
     }
 }
 
-impl AppMain for App{
-    
-    
+impl AppMain for App {
     // This function is used to handle any incoming events from the host system. It is called
     // automatically by the code we generated with the call to the macro `main_app` above.
     fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
+        // println!("entering handle_event");
         if let Event::Draw(event) = event {
+            println!("  draw = event");
             // This is a draw event, so create a draw context and use that to draw our application.
             return self.ui.draw_widget_all(&mut Cx2d::new(cx, event));
         }
@@ -167,6 +189,8 @@ impl AppMain for App{
         // Get a reference to our button from the frame, and check if one of the actions returned by
         // the frame was a notification that the button was clicked.
         if self.ui.get_button(id!(button1)).clicked(&actions) {
+            println!("  button1 clicked");
+
             //cx.spawn_async(Self::do_network_request(cx.get_ref(), self.ui.clone()))
             // Increment the counter.
             self.counter += 1;
@@ -177,5 +201,27 @@ impl AppMain for App{
             label.set_label(&format!("Counter: {}", self.counter));
             label.redraw(cx);
         }
+
+        // // let mut new_todo:Option<String> = None;
+        // let label_example = self.ui.get_label(id!(label_example));
+
+        // for widget_action in self.ui.handle_widget_event(cx, event) {
+        //     println!("  widget_action");
+
+        //     if let TextInputAction::Return(value) = widget_action.action::<TextInputAction>() {
+        //     println!("  TextInputAction::Return");
+
+        //         if !value.is_empty() {
+        //             // new_todo = Some(value);
+        //             self.sample = Some(value).unwrap();
+        //             println!("New todo: {}",  self.sample);
+        //             label_example.set_label(&format!("{}",  self.sample));
+        //             label_example.redraw(cx); 
+        //             break
+        //         }
+        //     }
+        // }
+
+
     }
 }
