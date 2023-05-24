@@ -41,7 +41,11 @@ live_design!{
         font_size: (FONT_SIZE_H2),
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
     }
-    
+    REGULAR_TEXT = {
+        font_size: (20),
+        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
+    }
+
     COLOR_DOWN_FULL = #000
     
     COLOR_DOWN_0 = #x00000000
@@ -123,7 +127,6 @@ live_design!{
         }
     }
 
-
     InstrumentDropdown = <ElementBox> {
         layout: {align: {y: 0.5}, padding: <SPACING_0> {}, flow: Right}
         label = <Label> {
@@ -159,7 +162,7 @@ live_design!{
             // remainder of the frame after the previous children have been drawn.
             layout: {
                 flow: Down,
-                spacing: 20,
+                // spacing: 20,
                 align: {
                     x: 0.5,
                     y: 0.5
@@ -200,18 +203,82 @@ live_design!{
             // The `<Button>` syntax is used to inherit a DSL object from another DSL object. This
             // tells the Makepad runtime our DSL object has the same properties as the DSL object
             // named `Button`, except for the properties defined here below, which override any
-            // existing values.
-            
-            button1 = <Button> {
-                icon_walk:{margin:{left:10}, width:16,height:Fit}
-                label: "Click Button"
-            }
 
-            label1 = <Label> {
-                draw_label: {
-                    color: #f
-                },
-                label: "Label: 0"
+            // CornerFrame1 = <Frame> {
+            //     layout: {
+            //         flow: Down,
+            //         spacing: 20,
+            //         align: {
+            //             x: 0.5,
+            //             y: 0.0
+            //         }
+            //     },
+            //     buttonc1 = <Button> {
+            //         // icon_walk:{margin:{left:10}, width:16,height:Fit}
+            //         label: "Button Top"
+            //     }
+            // }
+
+            // CornerFrame2 = <Frame> {
+            //     layout: {
+            //         flow: Right,
+            //         spacing: 20,
+            //         align: {
+            //             x: 0.0,
+            //             y: 0.5
+            //         }
+            //     },
+            //     buttonc2 = <Button> {
+            //         // icon_walk:{margin:{left:10}, width:16,height:Fit}
+            //         label: "Button Left"
+            //     }
+            // }
+
+            // CornerFrame3 = <Frame> {
+            //     layout: {
+            //         flow: Down,
+            //         spacing: 20,
+            //         align: {
+            //             x: 1.0,
+            //             y: -0.7
+            //         }
+            //     },
+            //     buttonc3 = <Button> {
+            //         // icon_walk:{margin:{left:10}, width:16,height:Fit}
+            //         label: "Button Right"
+            //     }
+            // }
+
+            ButtonFrame = <Frame> {     
+                walk: {width: Fit, height: Fit}
+                layout: {
+                    flow: Down,
+                    spacing: 20,
+                    align: {
+                        x: 0.5,
+                        y: 0.5
+                    }
+                },       
+                button1 = <Button> {
+                    // icon_walk:{margin:{left:10}, width:16,height:Fit}
+                    label: "Button +"
+                }
+
+                label1 = <Label> {
+                    walk: {width: 100}
+                    align: {
+                        x: 0.3,
+                        // y: 1
+                    }
+                    draw_label: {
+                        color: #f
+                    },
+                    label: "Label: 0"
+                }
+                button2 = <Button> {
+                    icon_walk:{margin:{left:10}, width:16,height:Fit}
+                    label: "Button -"
+                }
             }
 
             InputFrame = <Frame> {
@@ -219,6 +286,10 @@ live_design!{
                 layout: {
                     flow: Right,
                     spacing: 10,
+                    align: {
+                        x: 0.5,
+                        y: 0.0
+                    }
                 },
 
                 label_example = <Label> {
@@ -234,7 +305,15 @@ live_design!{
                 }
 
                 input_example = <TextInput> {
-                    walk: {width:100, height:30},
+                    // instance border_width: 2.0,
+                    // walk: {width:500, height:30},
+                    draw_bg: {
+                        color: #333
+                    }
+                    draw_label: {
+                        text_style:<REGULAR_TEXT>{font_size: (14)},
+                        color: #aaaaaa
+                    }
                     text: "Enter Text Here"
                 }
             }
@@ -244,6 +323,10 @@ live_design!{
                 layout: {
                     flow: Right,
                     spacing: 10,
+                    align: {
+                        x: 0.5,
+                        y: 0.0
+                    }
                 },
 
                 label_example = <Label> {
@@ -277,6 +360,20 @@ live_design!{
                 // }
                 }
 
+                CornerFrame4 = <Frame> {
+                    layout: {
+                        flow: Down,
+                        spacing: 20,
+                        align: {
+                            x: 0.5,
+                            y: 1.0
+                        }
+                    },
+                    buttonc4 = <Button> {
+                        // icon_walk:{margin:{left:10}, width:16,height:Fit}
+                        label: "Button Bottom"
+                    }
+                }
             }
 
         }
@@ -363,6 +460,21 @@ impl AppMain for App {
             label.redraw(cx);
         }
 
+        if self.ui.get_button(id!(button2)).clicked(&actions) {
+            println!("  retained = button");
+
+            //cx.spawn_async(Self::do_network_request(cx.get_ref(), self.ui.clone()))
+            // Increment the counter.
+            if self.counter >= 1 {
+                self.counter -= 1;
+            }
+            
+            // Get a reference to our label from the frame, update its text, and schedule a redraw
+            // for it.
+            let label = self.ui.get_label(id!(label1));
+            label.set_label(&format!("Label: {}", self.counter));
+            label.redraw(cx);
+        }
         // // let mut new_todo:Option<String> = None;
         // let label_example = self.ui.get_label(id!(label_example));
 
