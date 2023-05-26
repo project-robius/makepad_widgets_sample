@@ -23,7 +23,7 @@ live_design!{
     import makepad_widgets::slides_view::SlidesView;
 
     SCREEN_WIDTH = 1200;
-    FONT_SIZE_H2 = 14
+    FONT_SIZE_H2 = 9.5
     
     SPACING_CONTROLS = 7.5;
 
@@ -147,7 +147,6 @@ live_design!{
     }
 
     LayoutFrame = <Frame>{
-            
         show_bg: true
         // The `layout` property determines how child widgets are laid out within a frame. In
         // this case, child widgets flow downward, with 20 pixels of spacing in between them,
@@ -193,7 +192,7 @@ live_design!{
                 }
             },
             buttonc1 = <Button> {
-                // icon_walk:{margin:{left:10}, width:16,height:Fit}
+                walk: {width: 120}
                 label: "Button Top"
             }
         }
@@ -204,31 +203,57 @@ live_design!{
                 spacing: 20,
                 align: {
                     x: 0.0,
-                    y: 0.5
+                    y: 0.0
                 }
             },
-            buttonc2 = <Button> {
-                // icon_walk:{margin:{left:10}, width:16,height:Fit}
-                label: "Button Left"
+
+            CornerFrame21 = <Frame> {
+                layout: {
+                    flow: Down,
+                    spacing: 20,
+                    align: {
+                        x: 0.0,
+                        y: 0.5
+                    }
+                },
+                buttonc21 = <Button> {
+                    walk: {width: 120}
+                    label: "Button Left"
+                }
+            }
+
+            CornerFrame22 = <Frame> {
+                layout: {
+                    flow: Down,
+                    spacing: 20,
+                    align: {
+                        x: 0.5,
+                        y: 0.5
+                    }
+                },
+                buttonc22 = <Button> {
+                    walk: {width: 120}
+                    label: "Button Center"
+                }
+            }
+
+            CornerFrame23 = <Frame> {
+                layout: {
+                    flow: Down,
+                    spacing: 20,
+                    align: {
+                        x: 1.0,
+                        y: 0.5
+                    }
+                },
+                buttonc23 = <Button> {
+                    walk: {width: 120}
+                    // icon_walk:{margin:{left:10}, width:16,height:Fit}
+                    label: "Button Right"
+                }
             }
         }
-
         CornerFrame3 = <Frame> {
-            layout: {
-                flow: Down,
-                spacing: 20,
-                align: {
-                    x: 1.0,
-                    y: -0.7
-                }
-            },
-            buttonc3 = <Button> {
-                // icon_walk:{margin:{left:10}, width:16,height:Fit}
-                label: "Button Right"
-            }
-        }
-
-        CornerFrame4 = <Frame> {
             layout: {
                 flow: Down,
                 spacing: 20,
@@ -237,8 +262,8 @@ live_design!{
                     y: 1.0
                 }
             },
-            buttonc4 = <Button> {
-                // icon_walk:{margin:{left:10}, width:16,height:Fit}
+            buttonc3 = <Button> {
+                walk: {width: 120}
                 label: "Button Bottom"
             }
         }
@@ -330,7 +355,7 @@ live_design!{
             }
 
             button2 = <Button> {
-                icon_walk:{margin:{left:10}, width:16,height:Fit}
+                // icon_walk:{margin:{left:10}, width:16,height:Fit}
                 draw_label: {
                     text_style:<REGULAR_TEXT>{},
                     color: #f
@@ -395,7 +420,7 @@ live_design!{
                     y: 1
                 }
                 draw_label: {
-                    text_style:<REGULAR_TEXT>{},
+                    // text_style:<REGULAR_TEXT>{},
                     color: #f
                 },
                 label: "Dropdown:"
@@ -417,10 +442,8 @@ live_design!{
                     values: [sel1, sel2, sel3, sel4]
                     labels: ["Selection 1", "Selection 2", "Selection 3","Selection 4"]
                 }
-            // }
             }
         }
-
     }
 
     // The `{{App}}` syntax is used to inherit a DSL object from a Rust struct. This tells the
@@ -433,8 +456,7 @@ live_design!{
         // `ui` field on the Rust struct `App`, the latter will be initialized from the DSL object
         // here below.
  
-        ui=<DesktopWindow>{
-        // MainFrame = <Frame>{
+        ui:<DesktopWindow>{
             show_bg: true
             // The `layout` property determines how child widgets are laid out within a frame. In
             // this case, child widgets flow downward, with 20 pixels of spacing in between them,
@@ -466,7 +488,7 @@ live_design!{
                     // Within a shader, the `self.geom_pos` syntax is used to access the `geom_pos`
                     // attribute of the shader. In this case, the `geom_pos` attribute is built in,
                     // and ranges from 0 to 1.
-                    return mix(#7, #5, self.geom_pos.y);
+                    return mix(#8, #5, self.geom_pos.y);
                 }
             }
             
@@ -505,7 +527,7 @@ live_design!{
                 label1 = <Label> {
                     walk: {width: 100}
                     align: {
-                        x: 0.3,
+                        x: 0.5,
                         // y: 1
                     }
                     draw_label: {
@@ -599,7 +621,11 @@ live_design!{
             }
         }
 
-        ui:<DesktopWindow> {
+        ui=<DesktopWindow>{
+            <LayoutFrame> {}
+        }
+
+        ui=<DesktopWindow> {
             window: {inner_size: vec2(1280, 1080)},
             pass: {clear_color: #2A}
             block_signal_event: true; 
@@ -612,7 +638,7 @@ live_design!{
                 }
                 <Slide> {
                     title = {label: ""},
-                    <SlideBody> {label: "Simple Widgets"}
+                    <SlideBody> {label: "Widgets"}
                 }
                 <Slide> {title = {label: ""}, 
                     <Box>{
@@ -624,7 +650,7 @@ live_design!{
                 }
                 <Slide> {
                     title = {label: ""},
-                    <SlideBody> {label: "Simple Layout"}
+                    <SlideBody> {label: "Layout"}
                 }
                 <Slide> {title = {label: ""}, 
                     <Box>{
@@ -669,7 +695,7 @@ pub struct App {
     // The #[rust] attribute here is used to indicate that this field should *not* be initialized
     // from a DSL object, even when a corresponding property exists.
     #[rust] counter: usize,
-    #[rust] sample: String,
+    // #[rust] sample: String,
 }
 
 impl LiveHook for App {
