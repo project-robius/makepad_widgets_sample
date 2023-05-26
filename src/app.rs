@@ -458,11 +458,11 @@ live_design!{
         // `ui` field on the Rust struct `App`, the latter will be initialized from the DSL object
         // here below.
  
-        ui:<DesktopWindow>{
-            <LayoutFrame> {}
-        }
+        // ui=<DesktopWindow>{
+        //     <LayoutFrame> {}
+        // }
 
-        ui=<DesktopWindow>{
+        ui:<DesktopWindow>{
             show_bg: true
             // The `layout` property determines how child widgets are laid out within a frame. In
             // this case, child widgets flow downward, with 20 pixels of spacing in between them,
@@ -698,7 +698,7 @@ pub struct App {
     // The #[rust] attribute here is used to indicate that this field should *not* be initialized
     // from a DSL object, even when a corresponding property exists.
     #[rust] counter: usize,
-    // #[rust] sample: String,
+    #[rust] sample: String,
 }
 
 impl LiveHook for App {
@@ -753,17 +753,16 @@ impl AppMain for App {
             label.redraw(cx);
         }
 
-        // for widget_action in self.ui.handle_widget_event(cx, event) {
-        //     if let TextInputAction::Return(value) = widget_action.action::<TextInputAction>() {
-        //         if !value.is_empty() {
-        //             // println!("sample value: {}",  value);
-        //             self.sample = value;
-        //             self.label_example.set_label(&format!("{}",  self.sample));
-        //             self.label_example.redraw(cx); 
-        //             break
-        //         }
-        //     }
-        // }
+        // TODO: Fix double characters
+        let mut new_todo:Option<String> = None;
+        for widget_action in self.ui.handle_widget_event(cx, event) {
+            if let TextInputAction::Return(value) = widget_action.action::<TextInputAction>() {
+                if !value.is_empty() {
+                    new_todo = Some(value);
+                    break
+                }
+            }
+        }
 
         let ui = self.ui.clone();
         let mut drop_db = DataBindingStore::new();
