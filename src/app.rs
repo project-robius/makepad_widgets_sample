@@ -253,7 +253,7 @@ live_design!{
                 }
             },
 
-            label_example = <Label> {
+            label_input = <Label> {
                 walk: {height:30},
                 align: {
                     // x: 1.5,
@@ -266,7 +266,7 @@ live_design!{
                 label: "Text Input:"
             }
 
-            input_example = <TextInput> {
+            input_sample = <TextInput> {
                 // instance border_width: 2.0,
                 // walk: {width:500, height:30},
                 draw_bg: {
@@ -400,22 +400,22 @@ live_design!{
                 }
             }
 
-            <WidgetFrame> {}
+            // <WidgetFrame> {}
 
-            // CornerFrame22 = <Frame> {
-            //     layout: {
-            //         flow: Down,
-            //         spacing: 20,
-            //         align: {
-            //             x: 0.5,
-            //             y: 0.5
-            //         }
-            //     },
-            //     buttonc22 = <Button> {
-            //         walk: {width: 120}
-            //         label: "Button Center"
-            //     }
-            // }
+            CornerFrame22 = <Frame> {
+                layout: {
+                    flow: Down,
+                    spacing: 20,
+                    align: {
+                        x: 0.5,
+                        y: 0.5
+                    }
+                },
+                buttonc22 = <Button> {
+                    walk: {width: 120}
+                    label: "Button Center"
+                }
+            }
 
             CornerFrame23 = <Frame> {
                 layout: {
@@ -463,170 +463,173 @@ live_design!{
         // }
 
         ui:<DesktopWindow>{
-            show_bg: true
-            // The `layout` property determines how child widgets are laid out within a frame. In
-            // this case, child widgets flow downward, with 20 pixels of spacing in between them,
-            // and centered horizontally with respect to the entire frame.
-            //
-            // Because the child widgets flow downward, vertical alignment works somewhat
-            // differently. In this case, children are centered vertically with respect to the
-            // remainder of the frame after the previous children have been drawn.
-            layout: {
-                flow: Down,
-                // spacing: 20,
-                align: {
-                    x: 0.5,
-                    y: 0.5
-                }
-            },
-            // The `walk` property determines how the frame widget itself is laid out. In this
-            // case, the frame widget takes up the entire window.
-            walk: {
-                width: Fill,
-                height: Fill
-            },
-            draw_bg: {
-                // The `fn pixel(self) -> vec4` syntax is used to define a property named `pixel`,
-                // the value of which is a shader. We use our own custom DSL to define shaders. It's
-                // syntax is *mostly* compatible with GLSL, although there are some differences as
-                // well.
-                fn pixel(self) -> vec4 {
-                    // Within a shader, the `self.geom_pos` syntax is used to access the `geom_pos`
-                    // attribute of the shader. In this case, the `geom_pos` attribute is built in,
-                    // and ranges from 0 to 1.
-                    return mix(#8, #5, self.geom_pos.y);
-                }
-            }
-            
-            // The `name:` syntax is used to define fields, i.e. properties for which there are
-            // corresponding struct fields. In contrast, the `name =` syntax is used to define
-            // instance properties, i.e. properties for which there are no corresponding struct
-            // fields. Note that fields and instance properties use different namespaces, so you
-            // can have both a field and an instance property with the same name.
-            //
-            // Widgets can hook into the Makepad runtime with custom code and determine for
-            // themselves how they want to handle instance properties. In the case of frame widgets,
-            // they simply iterate over their instance properties, and use them to instantiate their
-            // child widgets.
-            
-            // A button to increment the counter.
-            //
-            // The `<Button>` syntax is used to inherit a DSL object from another DSL object. This
-            // tells the Makepad runtime our DSL object has the same properties as the DSL object
-            // named `Button`, except for the properties defined here below, which override any
-
-            ButtonFrame = <Frame> {     
-                walk: {width: Fit, height: Fit}
-                layout: {
-                    flow: Down,
-                    spacing: 20,
-                    align: {
-                        x: 0.5,
-                        y: 0.5
-                    }
-                },       
-                button1 = <Button> {
-                    // icon_walk:{margin:{left:10}, width:16,height:Fit}
-                    label: "Button +"
-                }
-
-                label1 = <Label> {
-                    walk: {width: 100}
-                    align: {
-                        x: 0.5,
-                        // y: 1
-                    }
-                    draw_label: {
-                        color: #f
-                    },
-                    label: "Label: 0"
-                }
-                button2 = <Button> {
-                    // icon_walk:{margin:{left:10}, width:16,height:Fit}
-                    label: "Button -"
-                }
-            }
-
-            InputFrame = <Frame> {
-                walk: {width: Fit, height: Fit}
-                layout: {
-                    flow: Right,
-                    spacing: 10,
-                    align: {
-                        x: 0.5,
-                        y: 0.0
-                    }
-                },
-
-                label_example = <Label> {
-                    walk: {height:30},
-                    align: {
-                        // x: 1.5,
-                        y: 1
-                    }
-                    draw_label: {
-                        color: #f
-                    },
-                    label: "Text Input:"
-                }
-
-                input_example = <TextInput> {
-                    // instance border_width: 2.0,
-                    // walk: {width:500, height:30},
-                    draw_bg: {
-                        color: #333
-                    }
-                    draw_label: {
-                        text_style:<REGULAR_TEXT>{font_size: (14)},
-                        color: #aaaaaa
-                    }
-                    text: "Enter Text Here"
-                }
-            }
-
-            DropDownFrame = <Frame> {
-                walk: {width: Fit, height: Fit}
-                layout: {
-                    flow: Right,
-                    spacing: 10,
-                    align: {
-                        x: 0.5,
-                        y: 0.0
-                    }
-                },
-
-                label_example = <Label> {
-                    walk: {height:30},
-                    align: {
-                        // x: 1.5,
-                        y: 1
-                    }
-                    draw_label: {
-                        color: #f
-                    },
-                    label: "Dropdown:"
-                }
-
-                my_dropdown = <InstrumentDropdown> {
-                    layout: {flow: Down}
-                    walk: {
-                        width: Fit,
-                        height: 30,
-                        margin: {
-                            top: (SPACING_CONTROLS),
-                            right: (SPACING_CONTROLS),
-                            bottom: (SPACING_CONTROLS),
-                            left: 0.0
-                        }
-                    }
-                    dropdown = {
-                        values: [sel1, sel2, sel3, sel4]
-                        labels: ["Selection 1", "Selection 2", "Selection 3","Selection 4"]
-                    }
-                }
-            }
+            <WidgetFrame> {}
         }
 
+        // ui=<DesktopWindow>{
+        //     show_bg: true
+        //     // The `layout` property determines how child widgets are laid out within a frame. In
+        //     // this case, child widgets flow downward, with 20 pixels of spacing in between them,
+        //     // and centered horizontally with respect to the entire frame.
+        //     //
+        //     // Because the child widgets flow downward, vertical alignment works somewhat
+        //     // differently. In this case, children are centered vertically with respect to the
+        //     // remainder of the frame after the previous children have been drawn.
+        //     layout: {
+        //         flow: Down,
+        //         // spacing: 20,
+        //         align: {
+        //             x: 0.5,
+        //             y: 0.5
+        //         }
+        //     },
+        //     // The `walk` property determines how the frame widget itself is laid out. In this
+        //     // case, the frame widget takes up the entire window.
+        //     walk: {
+        //         width: Fill,
+        //         height: Fill
+        //     },
+        //     draw_bg: {
+        //         // The `fn pixel(self) -> vec4` syntax is used to define a property named `pixel`,
+        //         // the value of which is a shader. We use our own custom DSL to define shaders. It's
+        //         // syntax is *mostly* compatible with GLSL, although there are some differences as
+        //         // well.
+        //         fn pixel(self) -> vec4 {
+        //             // Within a shader, the `self.geom_pos` syntax is used to access the `geom_pos`
+        //             // attribute of the shader. In this case, the `geom_pos` attribute is built in,
+        //             // and ranges from 0 to 1.
+        //             return mix(#8, #5, self.geom_pos.y);
+        //         }
+        //     }
+            
+        //     // The `name:` syntax is used to define fields, i.e. properties for which there are
+        //     // corresponding struct fields. In contrast, the `name =` syntax is used to define
+        //     // instance properties, i.e. properties for which there are no corresponding struct
+        //     // fields. Note that fields and instance properties use different namespaces, so you
+        //     // can have both a field and an instance property with the same name.
+        //     //
+        //     // Widgets can hook into the Makepad runtime with custom code and determine for
+        //     // themselves how they want to handle instance properties. In the case of frame widgets,
+        //     // they simply iterate over their instance properties, and use them to instantiate their
+        //     // child widgets.
+            
+        //     // A button to increment the counter.
+        //     //
+        //     // The `<Button>` syntax is used to inherit a DSL object from another DSL object. This
+        //     // tells the Makepad runtime our DSL object has the same properties as the DSL object
+        //     // named `Button`, except for the properties defined here below, which override any
+
+        //     ButtonFrame = <Frame> {     
+        //         walk: {width: Fit, height: Fit}
+        //         layout: {
+        //             flow: Down,
+        //             spacing: 20,
+        //             align: {
+        //                 x: 0.5,
+        //                 y: 0.5
+        //             }
+        //         },       
+        //         button1 = <Button> {
+        //             // icon_walk:{margin:{left:10}, width:16,height:Fit}
+        //             label: "Button +"
+        //         }
+
+        //         label1 = <Label> {
+        //             walk: {width: 100}
+        //             align: {
+        //                 x: 0.5,
+        //                 // y: 1
+        //             }
+        //             draw_label: {
+        //                 color: #f
+        //             },
+        //             label: "Label: 0"
+        //         }
+        //         button2 = <Button> {
+        //             // icon_walk:{margin:{left:10}, width:16,height:Fit}
+        //             label: "Button -"
+        //         }
+        //     }
+
+        //     InputFrame = <Frame> {
+        //         walk: {width: Fit, height: Fit}
+        //         layout: {
+        //             flow: Right,
+        //             spacing: 10,
+        //             align: {
+        //                 x: 0.5,
+        //                 y: 0.0
+        //             }
+        //         },
+
+        //         label_example = <Label> {
+        //             walk: {height:30},
+        //             align: {
+        //                 // x: 1.5,
+        //                 y: 1
+        //             }
+        //             draw_label: {
+        //                 color: #f
+        //             },
+        //             label: "Text Input:"
+        //         }
+
+        //         input_sample = <TextInput> {
+        //             // instance border_width: 2.0,
+        //             // walk: {width:120, height:30},
+        //             draw_bg: {
+        //                 color: #333
+        //             }
+        //             draw_label: {
+        //                 text_style:<REGULAR_TEXT>{font_size: (14)},
+        //                 color: #aaaaaa
+        //             }
+        //             text: "Enter Text Here to change the label"
+        //         }
+        //     }
+
+        //     DropDownFrame = <Frame> {
+        //         walk: {width: Fit, height: Fit}
+        //         layout: {
+        //             flow: Right,
+        //             spacing: 10,
+        //             align: {
+        //                 x: 0.5,
+        //                 y: 0.0
+        //             }
+        //         },
+
+        //         label_dropdown = <Label> {
+        //             walk: {height:30},
+        //             align: {
+        //                 // x: 1.5,
+        //                 y: 1
+        //             }
+        //             draw_label: {
+        //                 color: #f
+        //             },
+        //             label: "Dropdown:"
+        //         }
+
+        //         my_dropdown = <InstrumentDropdown> {
+        //             layout: {flow: Down}
+        //             walk: {
+        //                 width: Fit,
+        //                 height: 30,
+        //                 margin: {
+        //                     top: (SPACING_CONTROLS),
+        //                     right: (SPACING_CONTROLS),
+        //                     bottom: (SPACING_CONTROLS),
+        //                     left: 0.0
+        //                 }
+        //             }
+        //             dropdown = {
+        //                 values: [sel1, sel2, sel3, sel4]
+        //                 labels: ["Selection 1", "Selection 2", "Selection 3","Selection 4"]
+        //             }
+        //         }
+        //     }
+        // }
 
         ui=<DesktopWindow> {
             window: {inner_size: vec2(1280, 1080)},
@@ -689,9 +692,7 @@ pub struct App {
     // A chromeless window for our application. Used to contain our frame widget.
     // A frame widget. Used to contain our button and label.
     #[live] ui: WidgetRef,
-    #[live] label_example: LabelRef,
-    
-    // #[live] input_example: TextInputRef,
+    // #[live] label_example: LabelRef,
 
     // The value for our counter.
     //
@@ -753,12 +754,13 @@ impl AppMain for App {
             label.redraw(cx);
         }
 
-        // TODO: Fix double characters
-        let mut new_todo:Option<String> = None;
-        for widget_action in self.ui.handle_widget_event(cx, event) {
+        for widget_action in &actions {
             if let TextInputAction::Return(value) = widget_action.action::<TextInputAction>() {
                 if !value.is_empty() {
-                    new_todo = Some(value);
+                    // println!("value={}", value);
+                    let label =self.ui.get_label(id!(label_input));
+                    label.set_label(&format!("{}",  value));
+                    label.redraw(cx);
                     break
                 }
             }
