@@ -162,7 +162,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "widgets"
+name = "makepad_widgets_sample"
 version = "0.1.0"
 dependencies = [
  "makepad-platform",
