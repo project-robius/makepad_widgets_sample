@@ -146,128 +146,6 @@ live_design!{
         }
     }
 
-    LayoutFrame = <Frame>{
-        show_bg: true
-        // The `layout` property determines how child widgets are laid out within a frame. In
-        // this case, child widgets flow downward, with 20 pixels of spacing in between them,
-        // and centered horizontally with respect to the entire frame.
-        //
-        // Because the child widgets flow downward, vertical alignment works somewhat
-        // differently. In this case, children are centered vertically with respect to the
-        // remainder of the frame after the previous children have been drawn.
-        layout: {
-            flow: Down,
-            // spacing: 20,
-            align: {
-                x: 0.5,
-                y: 0.5
-            }
-        },
-        // The `walk` property determines how the frame widget itself is laid out. In this
-        // case, the frame widget takes up the entire window.
-        walk: {
-            width: Fill,
-            height: Fill
-        },
-        draw_bg: {
-            // The `fn pixel(self) -> vec4` syntax is used to define a property named `pixel`,
-            // the value of which is a shader. We use our own custom DSL to define shaders. It's
-            // syntax is *mostly* compatible with GLSL, although there are some differences as
-            // well.
-            fn pixel(self) -> vec4 {
-                // Within a shader, the `self.geom_pos` syntax  is used to access the `geom_pos`
-                // attribute of the shader. In this case, the `geom_pos` attribute is built in,
-                // and ranges from 0 to 1.
-                return mix(#5, #5, self.geom_pos.y);
-            }
-        }
-
-        CornerFrame1 = <Frame> {
-            layout: {
-                flow: Down,
-                spacing: 20,
-                align: {
-                    x: 0.5,
-                    y: 0.0
-                }
-            },
-            buttonc1 = <Button> {
-                walk: {width: 120}
-                label: "Button Top"
-            }
-        }
-
-        CornerFrame2 = <Frame> {
-            layout: {
-                flow: Right,
-                spacing: 20,
-                align: {
-                    x: 0.0,
-                    y: 0.0
-                }
-            },
-
-            CornerFrame21 = <Frame> {
-                layout: {
-                    flow: Down,
-                    spacing: 20,
-                    align: {
-                        x: 0.0,
-                        y: 0.5
-                    }
-                },
-                buttonc21 = <Button> {
-                    walk: {width: 120}
-                    label: "Button Left"
-                }
-            }
-
-            CornerFrame22 = <Frame> {
-                layout: {
-                    flow: Down,
-                    spacing: 20,
-                    align: {
-                        x: 0.5,
-                        y: 0.5
-                    }
-                },
-                buttonc22 = <Button> {
-                    walk: {width: 120}
-                    label: "Button Center"
-                }
-            }
-
-            CornerFrame23 = <Frame> {
-                layout: {
-                    flow: Down,
-                    spacing: 20,
-                    align: {
-                        x: 1.0,
-                        y: 0.5
-                    }
-                },
-                buttonc23 = <Button> {
-                    walk: {width: 120}
-                    // icon_walk:{margin:{left:10}, width:16,height:Fit}
-                    label: "Button Right"
-                }
-            }
-        }
-        CornerFrame3 = <Frame> {
-            layout: {
-                flow: Down,
-                spacing: 20,
-                align: {
-                    x: 0.5,
-                    y: 1.0
-                }
-            },
-            buttonc3 = <Button> {
-                walk: {width: 120}
-                label: "Button Bottom"
-            }
-        }
-    }
 
     WidgetFrame = <Frame>{
         show_bg: true
@@ -446,6 +324,130 @@ live_design!{
         }
     }
 
+    LayoutFrame = <Frame>{
+        show_bg: true
+        // The `layout` property determines how child widgets are laid out within a frame. In
+        // this case, child widgets flow downward, with 20 pixels of spacing in between them,
+        // and centered horizontally with respect to the entire frame.
+        //
+        // Because the child widgets flow downward, vertical alignment works somewhat
+        // differently. In this case, children are centered vertically with respect to the
+        // remainder of the frame after the previous children have been drawn.
+        layout: {
+            flow: Down,
+            // spacing: 20,
+            align: {
+                x: 0.5,
+                y: 0.5
+            }
+        },
+        // The `walk` property determines how the frame widget itself is laid out. In this
+        // case, the frame widget takes up the entire window.
+        walk: {
+            width: Fill,
+            height: Fill
+        },
+        draw_bg: {
+            // The `fn pixel(self) -> vec4` syntax is used to define a property named `pixel`,
+            // the value of which is a shader. We use our own custom DSL to define shaders. It's
+            // syntax is *mostly* compatible with GLSL, although there are some differences as
+            // well.
+            fn pixel(self) -> vec4 {
+                // Within a shader, the `self.geom_pos` syntax  is used to access the `geom_pos`
+                // attribute of the shader. In this case, the `geom_pos` attribute is built in,
+                // and ranges from 0 to 1.
+                return mix(#5, #5, self.geom_pos.y);
+            }
+        }
+
+        CornerFrame1 = <Frame> {
+            layout: {
+                flow: Down,
+                spacing: 20,
+                align: {
+                    x: 0.5,
+                    y: 0.0
+                }
+            },
+            buttonc1 = <Button> {
+                walk: {width: 120}
+                label: "Button Top"
+            }
+        }
+
+        CornerFrame2 = <Frame> {
+            layout: {
+                flow: Right,
+                spacing: 20,
+                align: {
+                    x: 0.0,
+                    y: 0.0
+                }
+            },
+
+            CornerFrame21 = <Frame> {
+                layout: {
+                    flow: Down,
+                    spacing: 20,
+                    align: {
+                        x: 0.0,
+                        y: 0.5
+                    }
+                },
+                buttonc21 = <Button> {
+                    walk: {width: 120}
+                    label: "Button Left"
+                }
+            }
+
+            <WidgetFrame> {}
+
+            // CornerFrame22 = <Frame> {
+            //     layout: {
+            //         flow: Down,
+            //         spacing: 20,
+            //         align: {
+            //             x: 0.5,
+            //             y: 0.5
+            //         }
+            //     },
+            //     buttonc22 = <Button> {
+            //         walk: {width: 120}
+            //         label: "Button Center"
+            //     }
+            // }
+
+            CornerFrame23 = <Frame> {
+                layout: {
+                    flow: Down,
+                    spacing: 20,
+                    align: {
+                        x: 1.0,
+                        y: 0.5
+                    }
+                },
+                buttonc23 = <Button> {
+                    walk: {width: 120}
+                    label: "Button Right"
+                }
+            }
+        }
+        CornerFrame3 = <Frame> {
+            layout: {
+                flow: Down,
+                spacing: 20,
+                align: {
+                    x: 0.5,
+                    y: 1.0
+                }
+            },
+            buttonc3 = <Button> {
+                walk: {width: 120}
+                label: "Button Bottom"
+            }
+        }
+    }
+
     // The `{{App}}` syntax is used to inherit a DSL object from a Rust struct. This tells the
     // Makepad runtime that our DSL object corresponds to a Rust struct named `App`. Whenever an
     // instance of `App` is initialized, the Makepad runtime will obtain its initial values from
@@ -457,6 +459,10 @@ live_design!{
         // here below.
  
         ui:<DesktopWindow>{
+            <LayoutFrame> {}
+        }
+
+        ui=<DesktopWindow>{
             show_bg: true
             // The `layout` property determines how child widgets are laid out within a frame. In
             // this case, child widgets flow downward, with 20 pixels of spacing in between them,
@@ -536,7 +542,7 @@ live_design!{
                     label: "Label: 0"
                 }
                 button2 = <Button> {
-                    icon_walk:{margin:{left:10}, width:16,height:Fit}
+                    // icon_walk:{margin:{left:10}, width:16,height:Fit}
                     label: "Button -"
                 }
             }
@@ -621,9 +627,6 @@ live_design!{
             }
         }
 
-        ui=<DesktopWindow>{
-            <LayoutFrame> {}
-        }
 
         ui=<DesktopWindow> {
             window: {inner_size: vec2(1280, 1080)},
@@ -727,8 +730,6 @@ impl AppMain for App {
         // Get a reference to our button from the frame, and check if one of the actions returned by
         // the frame was a notification that the button was clicked.
         if self.ui.get_button(id!(button1)).clicked(&actions) {
-            // println!("  retained = button1");
-
             // Increment the counter.
             self.counter += 1;
             
@@ -740,8 +741,6 @@ impl AppMain for App {
         }
 
         if self.ui.get_button(id!(button2)).clicked(&actions) {
-            // println!("  retained = button2");
-
             // Decrement the counter.
             if self.counter >= 1 {
                 self.counter -= 1;
@@ -757,7 +756,7 @@ impl AppMain for App {
         // for widget_action in self.ui.handle_widget_event(cx, event) {
         //     if let TextInputAction::Return(value) = widget_action.action::<TextInputAction>() {
         //         if !value.is_empty() {
-        //             println!("sample value: {}",  value);
+        //             // println!("sample value: {}",  value);
         //             self.sample = value;
         //             self.label_example.set_label(&format!("{}",  self.sample));
         //             self.label_example.redraw(cx); 
