@@ -178,7 +178,7 @@ live_design!{
                 // Within a shader, the `self.geom_pos` syntax is used to access the `geom_pos`
                 // attribute of the shader. In this case, the `geom_pos` attribute is built in,
                 // and ranges from 0 to 1.
-                return mix(#7, #5, self.geom_pos.y);
+                return mix(#f, #1, self.geom_pos.y);
             }
         }
         
@@ -257,10 +257,10 @@ live_design!{
                     y: 1
                 }
                 draw_text: {
-                    text_style:<REGULAR_TEXT>{},
+                    text_style: { font_size: 16 }
                     color: #f
                 },
-                text: "Text Input:"
+                text: "Text:"
             }
 
             input_sample = <TextInput> {
@@ -270,7 +270,7 @@ live_design!{
                     color: #333
                 }
                 draw_text: {
-                    text_style:<REGULAR_TEXT>{},
+                    text_style: { font_size: 16 }
                     color: #aaaaaa
                 }
                 text: "Enter Text Here"
@@ -428,7 +428,7 @@ live_design!{
         // here below.
  
         // following is one "version" of this sample app. make it ui:<Window> to activate, ui=<Window> to deactivate
-        ui=<Window>{
+        ui:<Window>{
             body = <WidgetView> {}
         }
 
@@ -438,7 +438,7 @@ live_design!{
         }
 
         // following is a third "version" of this sample app, combining both above in a slide view. make it ui:<Window> to activate, ui=<Window> to deactivate
-        ui:<Window> {
+        ui=<Window> {
             window: {inner_size: vec2(1280, 1080)}, // optimized for desktop window size, not mobile as mobile does not support slide swiping, etc.
             pass: {clear_color: #2A}
             block_signal_event: true; 
@@ -492,7 +492,7 @@ app_main!(App);
 // The #[derive(Live, LiveHook)] attribute implements a bunch of traits for this struct that enable
 // it to interact with the Makepad runtime. Among other things, this enables the Makepad runtime to
 // initialize the struct from a DSL object.
-#[derive(Live)]
+#[derive(Live, LiveHook)]
 // This function is used to register any DSL code that you depend on.
 // called automatically by the code we generated with the call to the macro `main_app` above.
 pub struct App {
@@ -500,6 +500,7 @@ pub struct App {
     // A frame widget. Used to contain our button and label.
     #[live] ui: WidgetRef,
     // #[live] label_example: LabelRef,
+    // #[live] input_sample: TextInput,
 
     // The value for our counter.
     //
@@ -509,8 +510,8 @@ pub struct App {
     // #[rust] sample: String,
 }
 
-impl LiveHook for App {
-    fn before_live_design(cx: &mut Cx) {
+impl LiveRegister for App {
+    fn live_register(cx: &mut Cx) {
         crate::makepad_widgets::live_design(cx);
     }
 }
@@ -521,25 +522,14 @@ impl App {
     }
 }
 
-impl AppMain for App {
-    // This function is used to handle any incoming events from the host system. It is called
-    // automatically by the code we generated with the call to the macro `main_app` above.
-    fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
-        if let Event::Draw(event) = event {
-            // This is a draw event, so create a draw context and use that to draw our application.
-            return self.ui.draw_widget_all(&mut Cx2d::new(cx, event));
-        }
-
-        // Forward the event to the frame. In this case, handle_event returns a list of actions.
-        // Actions are similar to events, except that events are always forwarded downward to child
-        // widgets, while actions are always returned back upwards to parent widgets.
-        let actions = self.ui.handle_widget_event(cx, event);
-        
+impl MatchEvent for App{
+    fn handle_actions(&mut self, cx: &mut Cx, actions:&Actions) {
         // Get a reference to our button from the frame, and check if one of the actions returned by
         // the frame was a notification that the button was clicked.
         if self.ui.button(id!(button1)).clicked(&actions) {
             // Increment the counter.
             self.counter += 1;
+            // log!("counter={}", self.counter);
             
             // Get a reference to our label from the frame, update its text, and schedule a redraw
             // for it.
@@ -552,6 +542,7 @@ impl AppMain for App {
             if self.counter >= 1 {
                 self.counter -= 1;
             }
+            // log!("counter={}", self.counter);
             
             // Get a reference to our label from the frame, update its text, and schedule a redraw
             // for it.
@@ -559,21 +550,21 @@ impl AppMain for App {
             label.set_text_and_redraw(cx,&format!("Label: {}", self.counter));
         }
 
-        for widget_action in &actions {
-            if let TextInputAction::Return(value) = widget_action.action::<TextInputAction>() {
-                if !value.is_empty() {
-                    // println!("value={}", value);
-                    let label =self.ui.label(id!(label_input));
-                    label.set_text_and_redraw(cx, &format!("{}",  value));
-                    break
-                }
-            }
-        }
+        let value = self.ui.text_input(id!(input_sample)).text();
+        // log!("value={}", value);
+        let label =self.ui.label(id!(label_input));
+        label.set_text_and_redraw(cx, &format!("Input: {}",  value));
 
         let ui = self.ui.clone();
         let mut drop_db = DataBindingStore::new();
         self.data_bind(drop_db.widgets_to_data(cx, &actions, &ui));
-        self.data_bind(drop_db.data_to_widgets(cx, &actions, &ui));
+        self.data_bind(drop_db.data_to_widgets(cx, &ui));
+    }
+}
 
+impl AppMain for App {
+    fn handle_event(&mut self, cx: &mut Cx, event: &Event) {
+        self.match_event(cx, event);
+        self.ui.handle_event(cx, event, &mut Scope::empty());
     }
 }
